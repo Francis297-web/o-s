@@ -1,1 +1,46 @@
+# Rust build artifacts
+/target/
 
+# Backup files
+*.bak
+*.tmp
+*.swp
+
+# Logs
+*.log
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Linux
+*~
+
+# Visual Studio Code
+.vscode/
+
+# JetBrains IDEs
+.idea/
+
+# Cargo lock (optional for libraries, keep for applications)
+# Cargo.lock
+
+# Generated binaries
+*.bin
+*.elf
+*.img
+*.iso
+
+# QEMU output
+qemu.log
+
+# Build directories
+build/
+dist/
+out/
+
+# Temporary files
+tmp/
+cache/
