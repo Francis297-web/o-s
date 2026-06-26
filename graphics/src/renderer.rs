@@ -1,234 +1,77 @@
-//! ============================================================
-//! NEXORA Graphics Engine
-//! renderer.rs
-//! ------------------------------------------------------------
-//! Responsible for rendering everything on screen.
-//!
-//! Future Responsibilities
-//! - Text Rendering
-//! - Shape Rendering
-//! - Image Rendering
-//! - Frame Presentation
-//! - Glow Effects
-//! - Aurora Ring
-//! - UI Rendering
-//! ============================================================
+#![no_std]
 
-/// RGBA color.
-#[derive(Clone, Copy, Debug)]
-pub struct Color {
-    pub r: u8,
-    pub g: u8,
-    pub b: u8,
-    pub a: u8,
-}
+use crate::display::{Display, Color};
+use crate::text::Text;
+use crate::effects::Effects;
 
-impl Color {
-
-    pub const BLACK: Color = Color {
-        r: 0,
-        g: 0,
-        b: 0,
-        a: 255,
-    };
-
-    pub const WHITE: Color = Color {
-        r: 255,
-        g: 255,
-        b: 255,
-        a: 255,
-    };
-
-    pub const AURORA_BLUE: Color = Color {
-        r: 0,
-        g: 220,
-        b: 255,
-        a: 255,
-    };
-
-    pub const AURORA_PURPLE: Color = Color {
-        r: 170,
-        g: 70,
-        b: 255,
-        a: 255,
-    };
-}
-
-/// Main graphics renderer.
+/// Main graphics renderer (real framebuffer-based)
 pub struct Renderer {
-
-    width: u32,
-
-    height: u32,
-
+    pub width: usize,
+    pub height: usize,
 }
 
 impl Renderer {
-
-    /// Create renderer.
-    pub fn new(width: u32, height: u32) -> Self {
-
-        Self {
-
-            width,
-
-            height,
-
-        }
-
+    pub fn new(width: usize, height: usize) -> Self {
+        Self { width, height }
     }
 
-    /// Initialize graphics.
     pub fn initialize(&self) {
-
-        println!(
-            "[GRAPHICS] Renderer initialized ({}x{})",
-            self.width,
-            self.height
-        );
-
+        // In real OS: init framebuffer, GPU, or boot services
     }
 
-    /// Clear the screen.
-    pub fn clear(&self, color: Color) {
-
-        println!(
-            "[RENDERER] Clear Screen -> {:?}",
-            color
-        );
-
+    pub fn clear(&self, display: &Display, color: Color) {
+        display.clear(color);
     }
 
-    /// Draw text.
     pub fn draw_text(
         &self,
+        display: &Display,
         text: &str,
-        x: i32,
-        y: i32,
+        x: usize,
+        y: usize,
         color: Color,
     ) {
-
-        println!(
-            "[RENDERER] TEXT '{}' ({},{}) {:?}",
-            text,
-            x,
-            y,
-            color
-        );
-
+        Text::draw_string(display, x, y, text, color);
     }
 
-    /// Draw line.
-    pub fn draw_line(
+    pub fn draw_centered_text(
         &self,
-        x1: i32,
-        y1: i32,
-        x2: i32,
-        y2: i32,
+        display: &Display,
+        text: &str,
+        y: usize,
         color: Color,
     ) {
-
-        println!(
-            "[RENDERER] LINE ({},{}) -> ({},{}) {:?}",
-            x1,
-            y1,
-            x2,
-            y2,
-            color
-        );
-
+        Text::draw_centered(display, y, text, color);
     }
 
-    /// Draw rectangle.
     pub fn draw_rect(
         &self,
-        x: i32,
-        y: i32,
-        width: u32,
-        height: u32,
+        display: &Display,
+        x: usize,
+        y: usize,
+        w: usize,
+        h: usize,
         color: Color,
     ) {
-
-        println!(
-            "[RENDERER] RECT ({},{}) {}x{} {:?}",
-            x,
-            y,
-            width,
-            height,
-            color
-        );
-
+        display.draw_rect(x, y, w, h, color);
     }
 
-    /// Draw circle.
-    pub fn draw_circle(
+    pub fn draw_pixel(
         &self,
-        x: i32,
-        y: i32,
-        radius: u32,
+        display: &Display,
+        x: usize,
+        y: usize,
         color: Color,
     ) {
-
-        println!(
-            "[RENDERER] CIRCLE ({},{}) radius={} {:?}",
-            x,
-            y,
-            radius,
-            color
-        );
-
+        display.put_pixel(x, y, color);
     }
 
-    /// Draw image.
-    pub fn draw_image(
-        &self,
-        path: &str,
-        x: i32,
-        y: i32,
-    ) {
-
-        println!(
-            "[RENDERER] IMAGE '{}' ({},{})",
-            path,
-            x,
-            y
-        );
-
+    pub fn apply_glow(&self, display: &Display) {
+        // placeholder hook for future shader-like effect
+        Effects::dim(display, 200);
     }
 
-    /// Draw glow effect.
-    pub fn draw_glow(
-        &self,
-        intensity: f32,
-    ) {
-
-        println!(
-            "[RENDERER] Glow intensity {}",
-            intensity
-        );
-
-    }
-
-    /// Draw Aurora Ring.
-    pub fn draw_aurora_ring(
-        &self,
-        radius: u32,
-    ) {
-
-        println!(
-            "[RENDERER] Aurora Ring radius {}",
-            radius
-        );
-
-    }
-
-    /// Present the completed frame.
     pub fn present(&self) {
-
-        println!(
-            "[GRAPHICS] Present Frame"
-        );
-
+        // In real OS: sync framebuffer / GPU / vsync
     }
-
 }
